@@ -164,8 +164,8 @@ SQL could be useful for my CEP because it would allow me to retrieve and organiz
 
 ## GitHub Repo
 
-<https://github.com/itsnik1/ibm-6500-sql-learning-portfolio/>
+[GitHub Repository](https://github.com/itsnik1/ibm-6500-sql-learning-portfolio/)
 
 ## GitHub Pages Published Link
 
-<https://itsnik1.github.io/ibm-6500-sql-learning-portfolio/introduction-to-sql.html>
+[Published Introduction to SQL Report](https://itsnik1.github.io/ibm-6500-sql-learning-portfolio/introduction-to-sql.html)
