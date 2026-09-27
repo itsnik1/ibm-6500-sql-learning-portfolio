@@ -1,0 +1,31 @@
+---
+title: "Introduction to SQL: Course Completion and Learning Notes"
+author: "Nik Sahami"
+date: today
+format:
+  html:
+    toc: true
+    toc-title: "Contents"
+    toc-depth: 3
+    number-sections: true
+    smooth-scroll: true
+    embed-resources: true
+---
+
+# Course Completion Evidence
+
+## Screenshot of Completion
+
+## When I Completed the Course
+
+# Learning Notes and Takeaways
+
+# Reflection and Future Reference
+
+# Appendix
+
+## GitHub Repo
+
+<https://github.com/itsnik1/ibm-6500-sql-learning-portfolio/>
+
+## GitHub Pages Published Link
