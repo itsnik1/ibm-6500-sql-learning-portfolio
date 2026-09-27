@@ -20,6 +20,8 @@ format:
 
 ## When I Completed the Course
 
+I completed the DataCamp Introduction to SQL course on September 26, 2026. It took me about an hour. The certificate displays September 27, probably because DataCamp records completion dates using a different time zone.
+
 # Learning Notes and Takeaways
 
 ## Meet Databases and SQL
@@ -47,6 +49,10 @@ Relational Database – data is organized into tables that each cover a differen
 Databases can support millions or billions of rows
 
 - Better when data is large or many users and apps need to work with it
+
+### CEP Application
+
+This chapter was mostly just introduction to what a database is, but it can be helpful for my CEP because I will be able to understand how the database and SQL relationships work with each other.
 
 ## Write Your First SQL
 
@@ -94,6 +100,10 @@ Running a `SELECT` query does not update the original data, it just pulls from i
 
 SQL requires precise syntax, and small mistakes can prevent queries from running
 
+### CEP Application
+
+`SELECT`, `ORDER BY`, and `LIMIT` could help me examine student data at the Collins College of Hospitality Management for my CEP. I now know how to select relevant variables and rank groups by certain measures to narrow large datasets down to the most useful observations.
+
 ## Complete Your SQL Foundation
 
 The `DISTINCT` keyword after `SELECT` removes duplicates from the selected column:
@@ -140,12 +150,22 @@ Traditional database – requires server address, username, password, and databa
 
 cloud database - access depends on the service and the organization’s setup
 
+### CEP Application
+
+This chapter gave me some helpful info about `DISTINCT` and `AS` functions to help me organize and label data effectively. It also provided info about clients and different flavors of SQL as well as different types of databases. This will all be helpful when I start working with the real data provided by the school.
+
 # Reflection and Future Reference
 
-# Appendix
+The most useful skills I learned were how to select specific columns, sort results, remove duplicates, and limit the amount of data returned. I think these basic commands will be especially useful when working with larger datasets and the CCHM enrollment/retention data. I think the most challenging part was remembering the exact syntax and the order that SQL keywords need to appear in.
+
+SQL could be useful for my CEP because it would allow me to retrieve and organize student data before analyzing it. It could also help with marketing analytics by filtering customer data and summarizing large datasets to help me identify patterns. I will probably need to review commands such as `DISTINCT`, `ORDER BY`, `AS`, and differences between SQL dialects in the future, but I think this was a very helpful start.
+
+# Appendix: Publication Links
 
 ## GitHub Repo
 
 <https://github.com/itsnik1/ibm-6500-sql-learning-portfolio/>
 
 ## GitHub Pages Published Link
+
+<https://itsnik1.github.io/ibm-6500-sql-learning-portfolio/introduction-to-sql.html>
