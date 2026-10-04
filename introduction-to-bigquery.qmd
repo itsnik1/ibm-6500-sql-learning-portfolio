@@ -149,6 +149,10 @@ SELECT DISTINCT seller_city
 FROM ecommerce.ecomm_sellers;
 ```
 
+### For CEP
+
+BigQuery could be useful for my CEP because we may end up working with multiple types of data, like survey data and GA4. Understanding how projects, datasets, and tables are organized would make it easier to keep everything separated and still be able to query it together when needed.
+
 ## **Writing queries and data types**
 
 - BigQuery uses normal SQL rules for most queries
@@ -600,6 +604,10 @@ FROM
     UNNEST(order_items) items
 WHERE order_id = 'a0e747c954a595b0e3458c87ab1a4958';
 ```
+
+### For CEP
+
+This section is useful for my CEP because a lot of the analysis will depend on being able to pull only the data I actually need. Knowing how BigQuery handles different data types and structs vs arrays would help if we are working with more complicated datasets later on.
 
 ## **Querying data in BigQuery**
 
@@ -1053,6 +1061,10 @@ QUALIFY rolling_avg > 500
 ORDER BY order_purchase_timestamp;
 ```
 
+### For CEP
+
+I think this section would be especially useful for actually analyzing our CEP data. CTEs, aggregations, and window functions could help organize larger queries and make it easier to compare groups and look at patterns over time.
+
 ## **Data management and optimization**
 
 - BigQuery supports
@@ -1228,6 +1240,18 @@ WHERE p.payment_installments > 0
 GROUP BY p.payment_installments
 ```
 
+### For CEP
+
+This would matter more if the CEP data gets larger or starts coming from multiple sources. Knowing how to join tables correctly and use more efficient functions would help keep the analysis organized without making the queries unnecessarily complicated.
+
 # Overall Reflection and Future Reference
 
+The most useful part of this course for me was seeing how BigQuery works to expand on just writing in SQL. I had a basic understanding of SQL, but BigQuery adds more around how data is stored and processed in the cloud. I also liked learning about CTEs, aggregations, joins, and window functions because those seem like things I could actually use again for analysis, especially in the CEP.
+
+The parts I would probably need to review again are arrays and structs, some of the date functions, and window functions because they were more complicated than the basic SQL commands I was familiar with before. For my CEP, I think BigQuery could be useful if we are working with larger datasets from surveys or GA4 or Tableau. It would make it easier to combine and summarize the data and pull out only the information we need for the analysis.
+
 # Appendix: Publication Links
+
+[GitHub Repo](https://github.com/itsnik1/ibm-6500-sql-learning-portfolio)
+
+GH Pages Link

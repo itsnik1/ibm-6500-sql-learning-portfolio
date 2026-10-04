@@ -2213,10 +2213,22 @@ vertical-align: -.125em;
   <li><a href="#course-completion-evidence" id="toc-course-completion-evidence" class="nav-link active" data-scroll-target="#course-completion-evidence"><span class="header-section-number">1</span> Course Completion Evidence</a></li>
   <li><a href="#learning-notes-and-key-takeaways" id="toc-learning-notes-and-key-takeaways" class="nav-link" data-scroll-target="#learning-notes-and-key-takeaways"><span class="header-section-number">2</span> Learning Notes and Key Takeaways</a>
   <ul class="collapse">
-  <li><a href="#bigquery-architecture-and-structure" id="toc-bigquery-architecture-and-structure" class="nav-link" data-scroll-target="#bigquery-architecture-and-structure"><span class="header-section-number">2.1</span> <strong>BigQuery Architecture and Structure</strong></a></li>
-  <li><a href="#writing-queries-and-data-types" id="toc-writing-queries-and-data-types" class="nav-link" data-scroll-target="#writing-queries-and-data-types"><span class="header-section-number">2.2</span> <strong>Writing queries and data types</strong></a></li>
-  <li><a href="#querying-data-in-bigquery" id="toc-querying-data-in-bigquery" class="nav-link" data-scroll-target="#querying-data-in-bigquery"><span class="header-section-number">2.3</span> <strong>Querying data in BigQuery</strong></a></li>
-  <li><a href="#data-management-and-optimization" id="toc-data-management-and-optimization" class="nav-link" data-scroll-target="#data-management-and-optimization"><span class="header-section-number">2.4</span> <strong>Data management and optimization</strong></a></li>
+  <li><a href="#bigquery-architecture-and-structure" id="toc-bigquery-architecture-and-structure" class="nav-link" data-scroll-target="#bigquery-architecture-and-structure"><span class="header-section-number">2.1</span> <strong>BigQuery Architecture and Structure</strong></a>
+  <ul class="collapse">
+  <li><a href="#for-cep" id="toc-for-cep" class="nav-link" data-scroll-target="#for-cep"><span class="header-section-number">2.1.1</span> For CEP</a></li>
+  </ul></li>
+  <li><a href="#writing-queries-and-data-types" id="toc-writing-queries-and-data-types" class="nav-link" data-scroll-target="#writing-queries-and-data-types"><span class="header-section-number">2.2</span> <strong>Writing queries and data types</strong></a>
+  <ul class="collapse">
+  <li><a href="#for-cep-1" id="toc-for-cep-1" class="nav-link" data-scroll-target="#for-cep-1"><span class="header-section-number">2.2.1</span> For CEP</a></li>
+  </ul></li>
+  <li><a href="#querying-data-in-bigquery" id="toc-querying-data-in-bigquery" class="nav-link" data-scroll-target="#querying-data-in-bigquery"><span class="header-section-number">2.3</span> <strong>Querying data in BigQuery</strong></a>
+  <ul class="collapse">
+  <li><a href="#for-cep-2" id="toc-for-cep-2" class="nav-link" data-scroll-target="#for-cep-2"><span class="header-section-number">2.3.1</span> For CEP</a></li>
+  </ul></li>
+  <li><a href="#data-management-and-optimization" id="toc-data-management-and-optimization" class="nav-link" data-scroll-target="#data-management-and-optimization"><span class="header-section-number">2.4</span> <strong>Data management and optimization</strong></a>
+  <ul class="collapse">
+  <li><a href="#for-cep-3" id="toc-for-cep-3" class="nav-link" data-scroll-target="#for-cep-3"><span class="header-section-number">2.4.1</span> For CEP</a></li>
+  </ul></li>
   </ul></li>
   <li><a href="#overall-reflection-and-future-reference" id="toc-overall-reflection-and-future-reference" class="nav-link" data-scroll-target="#overall-reflection-and-future-reference"><span class="header-section-number">3</span> Overall Reflection and Future Reference</a></li>
   <li><a href="#appendix-publication-links" id="toc-appendix-publication-links" class="nav-link" data-scroll-target="#appendix-publication-links"><span class="header-section-number">4</span> Appendix: Publication Links</a></li>
@@ -2367,6 +2379,10 @@ vertical-align: -.125em;
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="kw">DISTINCT</span> seller_city</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">-- Specify the dataset and table</span></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> ecommerce.ecomm_sellers;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<section id="for-cep" class="level3" data-number="2.1.1">
+<h3 data-number="2.1.1" class="anchored" data-anchor-id="for-cep"><span class="header-section-number">2.1.1</span> For CEP</h3>
+<p>BigQuery could be useful for my CEP because we may end up working with multiple types of data, like survey data and GA4. Understanding how projects, datasets, and tables are organized would make it easier to keep everything separated and still be able to query it together when needed.</p>
+</section>
 </section>
 <section id="writing-queries-and-data-types" class="level2" data-number="2.2">
 <h2 data-number="2.2" class="anchored" data-anchor-id="writing-queries-and-data-types"><span class="header-section-number">2.2</span> <strong>Writing queries and data types</strong></h2>
@@ -2768,6 +2784,10 @@ vertical-align: -.125em;
 <span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- Add the right column to the UNNEST function</span></span>
 <span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a>    UNNEST(order_items) items</span>
 <span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> order_id <span class="op">=</span> <span class="st">&#39;a0e747c954a595b0e3458c87ab1a4958&#39;</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<section id="for-cep-1" class="level3" data-number="2.2.1">
+<h3 data-number="2.2.1" class="anchored" data-anchor-id="for-cep-1"><span class="header-section-number">2.2.1</span> For CEP</h3>
+<p>This section is useful for my CEP because a lot of the analysis will depend on being able to pull only the data I actually need. Knowing how BigQuery handles different data types and structs vs arrays would help if we are working with more complicated datasets later on.</p>
+</section>
 </section>
 <section id="querying-data-in-bigquery" class="level2" data-number="2.3">
 <h2 data-number="2.3" class="anchored" data-anchor-id="querying-data-in-bigquery"><span class="header-section-number">2.3</span> <strong>Querying data in BigQuery</strong></h2>
@@ -3179,6 +3199,10 @@ vertical-align: -.125em;
 <span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a><span class="co">-- Add the qualify statement to find all rows with an average over $500</span></span>
 <span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>QUALIFY rolling_avg <span class="op">&gt;</span> <span class="dv">500</span></span>
 <span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> order_purchase_timestamp;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<section id="for-cep-2" class="level3" data-number="2.3.1">
+<h3 data-number="2.3.1" class="anchored" data-anchor-id="for-cep-2"><span class="header-section-number">2.3.1</span> For CEP</h3>
+<p>I think this section would be especially useful for actually analyzing our CEP data. CTEs, aggregations, and window functions could help organize larger queries and make it easier to compare groups and look at patterns over time.</p>
+</section>
 </section>
 <section id="data-management-and-optimization" class="level2" data-number="2.4">
 <h2 data-number="2.4" class="anchored" data-anchor-id="data-management-and-optimization"><span class="header-section-number">2.4</span> <strong>Data management and optimization</strong></h2>
@@ -3330,13 +3354,21 @@ vertical-align: -.125em;
 <span id="cb24-30"><a href="#cb24-30" aria-hidden="true" tabindex="-1"></a><span class="kw">JOIN</span> ecommerce.ecomm_order_details o <span class="kw">USING</span> (order_id)</span>
 <span id="cb24-31"><a href="#cb24-31" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> p.payment_installments <span class="op">&gt;</span> <span class="dv">0</span></span>
 <span id="cb24-32"><a href="#cb24-32" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> p.payment_installments</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<section id="for-cep-3" class="level3" data-number="2.4.1">
+<h3 data-number="2.4.1" class="anchored" data-anchor-id="for-cep-3"><span class="header-section-number">2.4.1</span> For CEP</h3>
+<p>This would matter more if the CEP data gets larger or starts coming from multiple sources. Knowing how to join tables correctly and use more efficient functions would help keep the analysis organized without making the queries unnecessarily complicated.</p>
+</section>
 </section>
 </section>
 <section id="overall-reflection-and-future-reference" class="level1" data-number="3">
 <h1 data-number="3"><span class="header-section-number">3</span> Overall Reflection and Future Reference</h1>
+<p>The most useful part of this course for me was seeing how BigQuery works to expand on just writing in SQL. I had a basic understanding of SQL, but BigQuery adds more around how data is stored and processed in the cloud. I also liked learning about CTEs, aggregations, joins, and window functions because those seem like things I could actually use again for analysis, especially in the CEP.</p>
+<p>The parts I would probably need to review again are arrays and structs, some of the date functions, and window functions because they were more complicated than the basic SQL commands I was familiar with before. For my CEP, I think BigQuery could be useful if we are working with larger datasets from surveys or GA4 or Tableau. It would make it easier to combine and summarize the data and pull out only the information we need for the analysis.</p>
 </section>
 <section id="appendix-publication-links" class="level1" data-number="4">
 <h1 data-number="4"><span class="header-section-number">4</span> Appendix: Publication Links</h1>
+<p><a href="https://github.com/itsnik1/ibm-6500-sql-learning-portfolio">GitHub Repo</a></p>
+<p>GH Pages Link</p>
 </section>
 
 </main>
