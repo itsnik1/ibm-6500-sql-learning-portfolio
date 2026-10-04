@@ -303,7 +303,586 @@ LIMIT 10;
 
   - local uploads with Studio or `bq` must be under 100 MB
 
+Date/Time Types in BigQuery
+
+- Dates are useful for
+
+  - filtering large datasets
+
+  - extracting parts like month or day of week
+
+  - partitioning data for faster queries
+
+- `DATE`
+
+  - day, month, and year only
+
+- `TIMESTAMP`
+
+  - exact point in time
+
+  - includes date + time
+
+  - defaults to UTC
+
+- `TIME`
+
+  - time only
+
+- `DATETIME`
+
+  - date + time
+
+  - no required timezone
+
+- Common date/time functions
+
+  - `DATE_ADD` / `TIMESTAMP_ADD`
+
+    - add time
+
+  - `DATE_SUB` / `TIMESTAMP_SUB`
+
+    - subtract time
+
+  - `DATE_DIFF` / `TIMESTAMP_DIFF`
+
+    - find difference between dates/times
+
+  - use `INTERVAL` to define how much to add/subtract
+
+- `EXTRACT`
+
+  - pulls out a specific part
+
+  - ex: day of week, month, year
+
+- `FORMAT`
+
+  - changes how dates/times are displayed
+
+  - useful for making results easier to read
+
+- `CURRENT_DATE()` / `CURRENT_TIMESTAMP()`
+
+  - returns the current date or timestamp
+
+``` sql
+# 1: Complete the query to find all the orders on September 15th, 2016. The date string should be in the 'YYYY-MM-DD' format.
+
+-- Finish the query to find sales on 
+
+SELECT
+	COUNT(order_id)
+FROM
+	ecommerce.ecomm_order_details
+-- Add the correct date part and date using the correct format
+WHERE EXTRACT(DATE from order_purchase_timestamp) = '2016-09-15'
+
+# 2: Find all the orders placed in September by completing the query and counting the order_id.
+
+-- Finish the query to find sales in September 
+
+SELECT
+	-- Add the column we want to count by
+	COUNT(order_id)
+FROM
+	ecommerce.ecomm_order_details
+-- Add the correct date part and value for September
+WHERE EXTRACT(MONTH from order_purchase_timestamp) = 09
+
+# 3: Find all the orders in the fourth QUARTER of 2017 using a count of the order_id column.
+
+-- Finish the query to find sales in the fourth quarter of 2017
+
+SELECT
+	-- Add the column we want to count by
+	COUNT(order_id)
+FROM
+	ecommerce.ecomm_order_details
+-- Add the correct date part and value for each row, with the quarter coming first
+WHERE EXTRACT(quarter from order_purchase_timestamp) = 04
+AND EXTRACT(Year from order_purchase_timestamp) = 2017
+```
+
+``` sql
+# 1: Add the date formatting for the column order_purchase_timestamp in the 'MM/DD/YY' format using the %D option.
+
+-- Fill in the query to find the three days with the most orders
+
+SELECT
+	-- First, add the date formatting for dates
+	FORMAT_TIMESTAMP('%D', order_purchase_timestamp) AS order_date,
+    order_id
+FROM 
+	ecommerce.ecomm_order_details
+LIMIT 3;
+```
+
+``` sql
+# 1: Complete the query to find the total number of orders seven days after Black Friday in 2017. The first keyword is INTERVAL.
+
+-- Fill in the query to find the total number of orders in the seven days after Black Friday
+
+SELECT
+	COUNT(order_id)
+FROM 
+	ecommerce.ecomm_order_details
+WHERE order_purchase_timestamp BETWEEN
+	-- Add the correct date part and interval 
+	TIMESTAMP('2017-11-24') AND TIMESTAMP_ADD(TIMESTAMP('2017-11-24'), INTERVAL 7 DAY)
+	
+# 2: Complete the query to find all orders 30 days before Black Friday using the order_purchase_timestamp column and a function ending in _SUB
+
+-- Fill in the query to find the total number of orders in the seven days after Black Friday
+
+SELECT
+	COUNT(order_id)
+FROM 
+	ecommerce.ecomm_order_details
+-- Fill in the correct column name
+WHERE order_purchase_timestamp BETWEEN
+	-- Add the correct function to subtract from a timestamp
+	TIMESTAMP_SUB(TIMESTAMP('2017-11-24'), INTERVAL 30 DAY) AND TIMESTAMP('2017-11-24')
+	
+# 3: Find the total orders three days before and after Black Friday 2017 using the order_purchase_timestamp column.
+
+
+-- Fill in the query to find the total number in the three days before and after Black Friday
+
+SELECT
+	count(order_id)
+FROM 
+	ecommerce.ecomm_order_details
+-- First, add the correct column
+WHERE order_purchase_timestamp BETWEEN
+	-- Add the correct function to subtract from a timestamp and interval/date part
+	TIMESTAMP_SUB(TIMESTAMP('2017-11-24'), INTERVAL 3 DAY) 
+	-- Finally, add the correct function to add to a timestamp and interval/date part
+    AND TIMESTAMP_ADD(TIMESTAMP('2017-11-24'), INTERVAL 3 DAY)
+```
+
+``` sql
+# Complete the query to find the difference in days from the current day for the first five orders using the DATE_DIFF() function
+
+-- Finish the query to find the difference in days
+
+SELECT
+	-- Add in the function to find the difference between two dates
+	DATE_DIFF(
+      -- Finish the statement with the correct date part
+      EXTRACT(DATE FROM order_purchase_timestamp),
+      -- Add the function to find the current date
+      CURRENT_DATE(),
+      DAY
+    )
+FROM 
+	ecommerce.ecomm_order_details
+LIMIT 5;
+```
+
+Unstructured Data in BigQuery
+
+- BigQuery commonly uses unstructured data for more complex info in a row
+
+- `ARRAY`
+
+  - similar to a Python list
+
+  - ordered list of values
+
+  - starts at index `0`
+
+  - can access values with brackets
+
+- `STRUCT`
+
+  - similar to a Python dictionary / JSON
+
+  - can contain key-value pairs
+
+  - can also contain nested ARRAYs or STRUCTs
+
+  - use dot notation to access values
+
+- Useful ARRAY functions
+
+  - `ARRAY_LENGTH`
+
+    - counts elements
+
+  - `ARRAY_CONCAT`
+
+    - joins arrays together
+
+- `UNNEST`
+
+  - turns ARRAY values into separate rows
+
+  - also useful for ARRAYs containing STRUCTs
+
+- `SEARCH`
+
+  - searches across different data types
+
+  - especially useful for ARRAYs and STRUCTs
+
+  - returns TRUE/FALSE for each row
+
+``` sql
+# Create an array of product_id for products weighing 2,220 grams. First, check the ecomm_products table to identify the column that stores weight information.
+
+-- Fill in the query to construct the array
+
+SELECT
+	ARRAY(SELECT 
+          -- Add the column with the values you want in the array
+          	product_id 
+          FROM 
+          	ecommerce.ecomm_products
+          WHERE
+          	-- Add the column we want to filter by
+         	product_weight_g = 2220)
+```
+
+``` sql
+# Finish the query to run the SEARCH function to look for a value containing '0da9ffd92214425d880de3f94e74ce39' in the order_items column in the ecommerce.ecomm_orders table.
+
+-- Finish the query to search across the unstructured data
+
+SELECT 
+    -- Complete the SEARCH function
+	SEARCH(order_items, '0da9ffd92214425d880de3f94e74ce39') as results   
+-- Add the correct table name
+FROM ecommerce.ecomm_orders
+LIMIT 5
+```
+
+``` sql
+# 1: Complete the query to explore one row of data with the order_items column for the order_id is 'a0e747c954a595b0e3458c87ab1a4958'.
+
+-- Complete the below query
+
+SELECT
+	-- Add the correct column name
+	order_id, order_items
+FROM 
+	ecommerce.ecomm_orders
+-- Complete the where statement
+WHERE order_id = 'a0e747c954a595b0e3458c87ab1a4958';
+
+# 2: Complete the query to UNNEST the order_items column and alias it as items.
+
+-- Complete the below query
+
+SELECT
+	order_id, items
+FROM 
+	ecommerce.ecomm_orders,
+    -- Unnest the order items
+    UNNEST(order_items) AS items
+WHERE order_id = 'a0e747c954a595b0e3458c87ab1a4958';
+
+# 3: Finish the query to retrieve the price of each item using dot notation on the items alias.
+
+-- Complete the below query
+
+SELECT
+	-- Use dot notation to get the price of each item
+	order_id, items.price
+FROM 
+	ecommerce.ecomm_orders,
+    -- Add the right column to the UNNEST function
+    UNNEST(order_items) items
+WHERE order_id = 'a0e747c954a595b0e3458c87ab1a4958';
+```
+
 ## **Querying data in BigQuery**
+
+- CTE (Common Table Expressions) = temporary named result inside a query
+
+  - only exists for that query
+
+  - helps make complex queries easier to read
+
+- CTEs vs subqueries
+
+  - subqueries can get nested and messy
+
+  - CTEs make queries easier to modify and maintain
+
+- Writing a CTE
+
+  - use `WITH`
+
+  - give the CTE a name
+
+  - reference it in the main query
+
+- Multiple CTEs
+
+  - only use `WITH` once
+
+  - separate additional CTEs with commas
+
+  - later CTEs can use earlier CTEs
+
+- Common uses
+
+  - filter data before the main query
+
+  - precompute repeated logic/aggregations
+
+  - join data in smaller steps
+
+- Benefits
+
+  - cleaner queries
+
+  - easier to follow
+
+  - can improve performance by reducing repeated work
+
+``` sql
+# Create a new CTE orders for orders with a price over $150, un-nesting order_items to find the price column.
+# Join the results of the CTE to the ecomm_order_details dataset to find the number of order_status and aggregate them by COUNTing the orders in each status.
+
+-- Add the correct items to finish our filtered CTE
+
+-- Create a new CTE with the name orders
+WITH orders AS (
+  SELECT order_id
+  -- Add the correct column for the order item details
+  FROM ecommerce.ecomm_orders, UNNEST(order_items) items
+  -- Fill in the correct column for the item price 
+  WHERE items.price > 150
+)
+
+SELECT
+	-- Aggregate to find the total number of orders
+	COUNT(order_id),
+	-- Add the column for the status of the order
+	order_status
+FROM ecommerce.ecomm_order_details od
+JOIN orders o USING (order_id)
+GROUP BY order_status
+```
+
+``` sql
+# Add the correct aggregate functions in the subquery and the main query.
+# Use ARRAY_LENGTH to find the number of items in each order using the order_items column twice in the main query.
+
+WITH payments AS (
+  SELECT
+    -- Use the correct aggregate to find the highest number of payments
+    MAX(payment_sequential) AS num_payments,
+    order_id
+  FROM ecommerce.ecomm_payments 
+  -- Group the results by order
+  GROUP BY order_id)
+     
+SELECT
+  -- Add the correct function to find the length or number of order items
+  ARRAY_LENGTH(o.order_items) AS num_items,
+  MAX(p.num_payments) AS max_payments
+FROM ecommerce.ecomm_orders o
+JOIN payments p
+-- Add the correct keyword to join using the same column
+USING (order_id)
+-- Add the correct function to find the length or number of order items
+GROUP BY ARRAY_LENGTH(o.order_items)
+```
+
+``` sql
+# 1: Create a new CTE named orders that will extract the order_id column along with the product_id and price from the nested order_items column, all from the ecommerce.ecomm_orders table. Filter for price greater than 100.
+
+-- Create a CTE named "orders" that handles the queries for the ecomm_orders table
+
+WITH orders AS (
+SELECT order_id, items.product_id, items.price
+FROM ecommerce.ecomm_orders, UNNEST(order_items) items 
+WHERE items.price > 100
+)
+
+SELECT
+	order_id,
+	AVG(p.product_weight_g) as avg_weight
+FROM orders o
+JOIN ecommerce.ecomm_products p ON o.product_id = p.product_id
+GROUP BY o.order_id;
+
+# 2: Build a second CTE named products and move all the necessary elements from those tables into the new CTE.
+
+-- Create a second CTE named "products" and move all necessary elements into the CTE
+
+WITH orders AS (
+SELECT order_id, items.product_id, items.price
+FROM ecommerce.ecomm_orders o, UNNEST(order_items) items 
+WHERE items.price > 100
+),
+
+products AS (
+SELECT product_id,
+-- Find the average product weight
+AVG(product_weight_g) as avg_weight
+FROM ecommerce.ecomm_products
+-- Group the data by the correct id column
+GROUP BY product_id
+)
+
+SELECT
+	o.order_id,
+	p.avg_weight
+FROM orders o
+JOIN products p ON p.product_id = o.product_id;
+```
+
+- Aggregations summarize large datasets into smaller results
+
+  - useful for trends, patterns, and reporting
+
+- `GROUP BY`
+
+  - groups rows for aggregation
+
+- `ORDER BY`
+
+  - sorts results
+
+  - often used with aggregated values
+
+- Common aggregate functions
+
+  - `COUNT`
+
+    - counts rows
+
+  - `SUM`
+
+    - total of numeric values
+
+  - `AVG`
+
+    - average of numeric values
+
+  - `MIN`
+
+    - lowest value
+
+  - `MAX`
+
+    - highest value
+
+- `COUNTIF`
+
+  - counts rows that meet a condition
+
+  - ex: values over 500
+
+- `HAVING`
+
+  - filters grouped/aggregated results
+
+  - similar to `WHERE` but used after aggregation
+
+- `ANY_VALUE`
+
+  - returns one value from grouped data
+
+  - useful for non-aggregated columns
+
+  - can be combined with `HAVING MIN` or `HAVING MAX` to return a value tied to the lowest/highest result
+
+``` sql
+# Write a query that uses the COUNTIF function to find all the products over 5000 grams from the ecommerce.ecomm_products table.
+# Group the query by the product_category_name_english column.
+
+-- Complete the query to count all the products over 5000 grams
+
+SELECT
+  product_category_name_english,
+  
+  -- Add the function name and conditional expression
+  COUNTIF(product_weight_g > 5000)
+FROM ecommerce.ecomm_products
+
+-- Add the correct column for grouping
+GROUP BY product_category_name_english; 
+```
+
+``` sql
+# Complete the query by finding the average product weight (product_weight_g), grouped by the product category (product_category_name_english) from the ecommerce.ecomm_products table.
+# Use HAVING to find product categories with an average weight over 10,000 grams.
+
+-- Write a query that finds all product categories and their average weight with an average weight over 10,000 grams
+
+SELECT
+	-- Add the product_category_name_english column and the average weight
+    product_category_name_english, AVG(product_weight_g)
+FROM ecommerce.ecomm_products
+-- Add the GROUP BY statement
+GROUP BY product_category_name_english
+-- Add the HAVING condition on the average weight aggregate
+HAVING AVG(product_weight_g) > 10000;
+```
+
+``` sql
+# Complete the query by using the ANY_VALUE aggregate function on the product_category_name_english column, including the HAVING clause to find the maximum value of product_photos_qty, and assign the alias random_product to the result.
+
+-- Finish the query below by adding the ANY_VALUE function
+
+SELECT
+  product_weight_g,
+    -- Complete the query by adding the ANY_VALUE function on the product category column
+	ANY_VALUE(product_category_name_english HAVING MAX product_photos_qty) AS random_product
+FROM ecommerce.ecomm_products
+GROUP BY product_weight_g;
+```
+
+- Special aggregate functions can be faster on very large datasets
+
+  - often use approximations to reduce processing
+
+- `ARRAY_CONCAT_AGG`
+
+  - combines multiple arrays into one array
+
+- `STRING_AGG`
+
+  - combines strings into one string
+
+  - can add a delimiter like commas
+
+- `APPROX_COUNT_DISTINCT`
+
+  - estimates number of unique values
+
+  - faster than exact distinct counts on huge datasets
+
+- `APPROX_QUANTILES`
+
+  - estimates quantiles/percentiles
+
+  - useful for splitting data into ranges
+
+- `APPROX_TOP_COUNT`
+
+  - finds the most common top K values
+
+- `APPROX_TOP_SUM`
+
+  - finds top K values based on summed amounts
+
+- `LOGICAL_AND`
+
+  - TRUE only if all values are TRUE
+
+- `LOGICAL_OR`
+
+  - TRUE if at least one value is TRUE
+
+``` sql
+```
 
 ## **Data management and optimization**
 

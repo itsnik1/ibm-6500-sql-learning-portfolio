@@ -2507,9 +2507,522 @@ vertical-align: -.125em;
 <li><p>local uploads with Studio or <code>bq</code> must be under 100 MB</p></li>
 </ul></li>
 </ul>
+<p>Date/Time Types in BigQuery</p>
+<ul>
+<li><p>Dates are useful for</p>
+<ul>
+<li><p>filtering large datasets</p></li>
+<li><p>extracting parts like month or day of week</p></li>
+<li><p>partitioning data for faster queries</p></li>
+</ul></li>
+<li><p><code>DATE</code></p>
+<ul>
+<li>day, month, and year only</li>
+</ul></li>
+<li><p><code>TIMESTAMP</code></p>
+<ul>
+<li><p>exact point in time</p></li>
+<li><p>includes date + time</p></li>
+<li><p>defaults to UTC</p></li>
+</ul></li>
+<li><p><code>TIME</code></p>
+<ul>
+<li>time only</li>
+</ul></li>
+<li><p><code>DATETIME</code></p>
+<ul>
+<li><p>date + time</p></li>
+<li><p>no required timezone</p></li>
+</ul></li>
+<li><p>Common date/time functions</p>
+<ul>
+<li><p><code>DATE_ADD</code> / <code>TIMESTAMP_ADD</code></p>
+<ul>
+<li>add time</li>
+</ul></li>
+<li><p><code>DATE_SUB</code> / <code>TIMESTAMP_SUB</code></p>
+<ul>
+<li>subtract time</li>
+</ul></li>
+<li><p><code>DATE_DIFF</code> / <code>TIMESTAMP_DIFF</code></p>
+<ul>
+<li>find difference between dates/times</li>
+</ul></li>
+<li><p>use <code>INTERVAL</code> to define how much to add/subtract</p></li>
+</ul></li>
+<li><p><code>EXTRACT</code></p>
+<ul>
+<li><p>pulls out a specific part</p></li>
+<li><p>ex: day of week, month, year</p></li>
+</ul></li>
+<li><p><code>FORMAT</code></p>
+<ul>
+<li><p>changes how dates/times are displayed</p></li>
+<li><p>useful for making results easier to read</p></li>
+</ul></li>
+<li><p><code>CURRENT_DATE()</code> / <code>CURRENT_TIMESTAMP()</code></p>
+<ul>
+<li>returns the current date or timestamp</li>
+</ul></li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a># <span class="dv">1</span>: <span class="kw">Complete</span> <span class="kw">the</span> <span class="kw">query</span> <span class="kw">to</span> find <span class="kw">all</span> <span class="kw">the</span> orders <span class="kw">on</span> September <span class="dv">15</span>th, <span class="fl">2016.</span> <span class="kw">The</span> <span class="dt">date</span> string should be <span class="kw">in</span> <span class="kw">the</span> <span class="st">&#39;YYYY-MM-DD&#39;</span> format.</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">-- Finish the query to find sales on </span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">COUNT</span>(order_id)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    ecommerce.ecomm_order_details</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co">-- Add the correct date part and date using the correct format</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> <span class="fu">EXTRACT</span>(<span class="dt">DATE</span> <span class="kw">from</span> order_purchase_timestamp) <span class="op">=</span> <span class="st">&#39;2016-09-15&#39;</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a># <span class="dv">2</span>: Find <span class="kw">all</span> <span class="kw">the</span> orders placed <span class="kw">in</span> September <span class="kw">by</span> completing <span class="kw">the</span> <span class="kw">query</span> <span class="kw">and</span> counting <span class="kw">the</span> order_id.</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="co">-- Finish the query to find sales in September </span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- Add the column we want to count by</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">COUNT</span>(order_id)</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    ecommerce.ecomm_order_details</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="co">-- Add the correct date part and value for September</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> <span class="fu">EXTRACT</span>(<span class="dt">MONTH</span> <span class="kw">from</span> order_purchase_timestamp) <span class="op">=</span> <span class="dv">09</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a># <span class="dv">3</span>: Find <span class="kw">all</span> <span class="kw">the</span> orders <span class="kw">in</span> <span class="kw">the</span> fourth QUARTER <span class="kw">of</span> <span class="dv">2017</span> <span class="kw">using</span> a <span class="fu">count</span> <span class="kw">of</span> <span class="kw">the</span> order_id <span class="kw">column</span>.</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="co">-- Finish the query to find sales in the fourth quarter of 2017</span></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- Add the column we want to count by</span></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>    <span class="fu">COUNT</span>(order_id)</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span></span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>    ecommerce.ecomm_order_details</span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a><span class="co">-- Add the correct date part and value for each row, with the quarter coming first</span></span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> <span class="fu">EXTRACT</span>(quarter <span class="kw">from</span> order_purchase_timestamp) <span class="op">=</span> <span class="dv">04</span></span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a><span class="kw">AND</span> <span class="fu">EXTRACT</span>(<span class="dt">Year</span> <span class="kw">from</span> order_purchase_timestamp) <span class="op">=</span> <span class="dv">2017</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a># <span class="dv">1</span>: <span class="kw">Add</span> <span class="kw">the</span> <span class="dt">date</span> formatting <span class="cf">for</span> <span class="kw">the</span> <span class="kw">column</span> order_purchase_timestamp <span class="kw">in</span> <span class="kw">the</span> <span class="st">&#39;MM/DD/YY&#39;</span> format <span class="kw">using</span> <span class="kw">the</span> %D <span class="kw">option</span>.</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">-- Fill in the query to find the three days with the most orders</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- First, add the date formatting for dates</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    FORMAT_TIMESTAMP(<span class="st">&#39;%D&#39;</span>, order_purchase_timestamp) <span class="kw">AS</span> order_date,</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    order_id</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> </span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    ecommerce.ecomm_order_details</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">3</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a># <span class="dv">1</span>: <span class="kw">Complete</span> <span class="kw">the</span> <span class="kw">query</span> <span class="kw">to</span> find <span class="kw">the</span> total <span class="dt">number</span> <span class="kw">of</span> orders seven days <span class="kw">after</span> Black Friday <span class="kw">in</span> <span class="fl">2017.</span> <span class="kw">The</span> <span class="fu">first</span> keyword <span class="kw">is</span> <span class="dt">INTERVAL</span>.</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">-- Fill in the query to find the total number of orders in the seven days after Black Friday</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">COUNT</span>(order_id)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> </span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    ecommerce.ecomm_order_details</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> order_purchase_timestamp <span class="kw">BETWEEN</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- Add the correct date part and interval </span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    <span class="dt">TIMESTAMP</span>(<span class="st">&#39;2017-11-24&#39;</span>) <span class="kw">AND</span> TIMESTAMP_ADD(<span class="dt">TIMESTAMP</span>(<span class="st">&#39;2017-11-24&#39;</span>), <span class="dt">INTERVAL</span> <span class="dv">7</span> <span class="dt">DAY</span>)</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a># <span class="dv">2</span>: <span class="kw">Complete</span> <span class="kw">the</span> <span class="kw">query</span> <span class="kw">to</span> find <span class="kw">all</span> orders <span class="dv">30</span> days <span class="kw">before</span> Black Friday <span class="kw">using</span> <span class="kw">the</span> order_purchase_timestamp <span class="kw">column</span> <span class="kw">and</span> a <span class="kw">function</span> ending <span class="kw">in</span> _SUB</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="co">-- Fill in the query to find the total number of orders in the seven days after Black Friday</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">COUNT</span>(order_id)</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> </span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>    ecommerce.ecomm_order_details</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="co">-- Fill in the correct column name</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> order_purchase_timestamp <span class="kw">BETWEEN</span></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- Add the correct function to subtract from a timestamp</span></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>    TIMESTAMP_SUB(<span class="dt">TIMESTAMP</span>(<span class="st">&#39;2017-11-24&#39;</span>), <span class="dt">INTERVAL</span> <span class="dv">30</span> <span class="dt">DAY</span>) <span class="kw">AND</span> <span class="dt">TIMESTAMP</span>(<span class="st">&#39;2017-11-24&#39;</span>)</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a># <span class="dv">3</span>: Find <span class="kw">the</span> total orders three days <span class="kw">before</span> <span class="kw">and</span> <span class="kw">after</span> Black Friday <span class="dv">2017</span> <span class="kw">using</span> <span class="kw">the</span> order_purchase_timestamp <span class="kw">column</span>.</span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a><span class="co">-- Fill in the query to find the total number in the three days before and after Black Friday</span></span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>    <span class="fu">count</span>(order_id)</span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> </span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>    ecommerce.ecomm_order_details</span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a><span class="co">-- First, add the correct column</span></span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> order_purchase_timestamp <span class="kw">BETWEEN</span></span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- Add the correct function to subtract from a timestamp and interval/date part</span></span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a>    TIMESTAMP_SUB(<span class="dt">TIMESTAMP</span>(<span class="st">&#39;2017-11-24&#39;</span>), <span class="dt">INTERVAL</span> <span class="dv">3</span> <span class="dt">DAY</span>) </span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- Finally, add the correct function to add to a timestamp and interval/date part</span></span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a>    <span class="kw">AND</span> TIMESTAMP_ADD(<span class="dt">TIMESTAMP</span>(<span class="st">&#39;2017-11-24&#39;</span>), <span class="dt">INTERVAL</span> <span class="dv">3</span> <span class="dt">DAY</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a># <span class="kw">Complete</span> <span class="kw">the</span> <span class="kw">query</span> <span class="kw">to</span> find <span class="kw">the</span> difference <span class="kw">in</span> days <span class="kw">from</span> <span class="kw">the</span> <span class="kw">current</span> <span class="dt">day</span> <span class="cf">for</span> <span class="kw">the</span> <span class="fu">first</span> five orders <span class="kw">using</span> <span class="kw">the</span> DATE_DIFF() <span class="kw">function</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">-- Finish the query to find the difference in days</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- Add in the function to find the difference between two dates</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    DATE_DIFF(</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>      <span class="co">-- Finish the statement with the correct date part</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>      <span class="fu">EXTRACT</span>(<span class="dt">DATE</span> <span class="kw">FROM</span> order_purchase_timestamp),</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>      <span class="co">-- Add the function to find the current date</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>      <span class="fu">CURRENT_DATE</span>(),</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>      <span class="dt">DAY</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> </span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    ecommerce.ecomm_order_details</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Unstructured Data in BigQuery</p>
+<ul>
+<li><p>BigQuery commonly uses unstructured data for more complex info in a row</p></li>
+<li><p><code>ARRAY</code></p>
+<ul>
+<li><p>similar to a Python list</p></li>
+<li><p>ordered list of values</p></li>
+<li><p>starts at index <code>0</code></p></li>
+<li><p>can access values with brackets</p></li>
+</ul></li>
+<li><p><code>STRUCT</code></p>
+<ul>
+<li><p>similar to a Python dictionary / JSON</p></li>
+<li><p>can contain key-value pairs</p></li>
+<li><p>can also contain nested ARRAYs or STRUCTs</p></li>
+<li><p>use dot notation to access values</p></li>
+</ul></li>
+<li><p>Useful ARRAY functions</p>
+<ul>
+<li><p><code>ARRAY_LENGTH</code></p>
+<ul>
+<li>counts elements</li>
+</ul></li>
+<li><p><code>ARRAY_CONCAT</code></p>
+<ul>
+<li>joins arrays together</li>
+</ul></li>
+</ul></li>
+<li><p><code>UNNEST</code></p>
+<ul>
+<li><p>turns ARRAY values into separate rows</p></li>
+<li><p>also useful for ARRAYs containing STRUCTs</p></li>
+</ul></li>
+<li><p><code>SEARCH</code></p>
+<ul>
+<li><p>searches across different data types</p></li>
+<li><p>especially useful for ARRAYs and STRUCTs</p></li>
+<li><p>returns TRUE/FALSE for each row</p></li>
+</ul></li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a># <span class="kw">Create</span> an <span class="dt">array</span> <span class="kw">of</span> product_id <span class="cf">for</span> products weighing <span class="dv">2</span>,<span class="dv">220</span> grams. <span class="fu">First</span>, <span class="kw">check</span> <span class="kw">the</span> ecomm_products <span class="kw">table</span> <span class="kw">to</span> identify <span class="kw">the</span> <span class="kw">column</span> that stores weight information.</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">-- Fill in the query to construct the array</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">ARRAY</span>(<span class="kw">SELECT</span> </span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>          <span class="co">-- Add the column with the values you want in the array</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>            product_id </span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>          <span class="kw">FROM</span> </span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>            ecommerce.ecomm_products</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>          <span class="kw">WHERE</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>            <span class="co">-- Add the column we want to filter by</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>            product_weight_g <span class="op">=</span> <span class="dv">2220</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a># Finish <span class="kw">the</span> <span class="kw">query</span> <span class="kw">to</span> run <span class="kw">the</span> SEARCH <span class="kw">function</span> <span class="kw">to</span> look <span class="cf">for</span> a <span class="fu">value</span> containing <span class="st">&#39;0da9ffd92214425d880de3f94e74ce39&#39;</span> <span class="kw">in</span> <span class="kw">the</span> order_items <span class="kw">column</span> <span class="kw">in</span> <span class="kw">the</span> ecommerce.ecomm_orders <span class="kw">table</span>.</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">-- Finish the query to search across the unstructured data</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> </span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- Complete the SEARCH function</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    SEARCH(order_items, <span class="st">&#39;0da9ffd92214425d880de3f94e74ce39&#39;</span>) <span class="kw">as</span> results   </span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co">-- Add the correct table name</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> ecommerce.ecomm_orders</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="kw">LIMIT</span> <span class="dv">5</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a># <span class="dv">1</span>: <span class="kw">Complete</span> <span class="kw">the</span> <span class="kw">query</span> <span class="kw">to</span> explore one <span class="kw">row</span> <span class="kw">of</span> <span class="kw">data</span> <span class="kw">with</span> <span class="kw">the</span> order_items <span class="kw">column</span> <span class="cf">for</span> <span class="kw">the</span> order_id <span class="kw">is</span> <span class="st">&#39;a0e747c954a595b0e3458c87ab1a4958&#39;</span>.</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co">-- Complete the below query</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- Add the correct column name</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    order_id, order_items</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> </span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    ecommerce.ecomm_orders</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="co">-- Complete the where statement</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> order_id <span class="op">=</span> <span class="st">&#39;a0e747c954a595b0e3458c87ab1a4958&#39;</span>;</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a># <span class="dv">2</span>: <span class="kw">Complete</span> <span class="kw">the</span> <span class="kw">query</span> <span class="kw">to</span> UNNEST <span class="kw">the</span> order_items <span class="kw">column</span> <span class="kw">and</span> alias it <span class="kw">as</span> items.</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a><span class="co">-- Complete the below query</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>    order_id, items</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> </span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>    ecommerce.ecomm_orders,</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- Unnest the order items</span></span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>    UNNEST(order_items) <span class="kw">AS</span> items</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> order_id <span class="op">=</span> <span class="st">&#39;a0e747c954a595b0e3458c87ab1a4958&#39;</span>;</span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a># <span class="dv">3</span>: Finish <span class="kw">the</span> <span class="kw">query</span> <span class="kw">to</span> retrieve <span class="kw">the</span> price <span class="kw">of</span> <span class="kw">each</span> item <span class="kw">using</span> dot notation <span class="kw">on</span> <span class="kw">the</span> items alias.</span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a><span class="co">-- Complete the below query</span></span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- Use dot notation to get the price of each item</span></span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>    order_id, items.price</span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> </span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>    ecommerce.ecomm_orders,</span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- Add the right column to the UNNEST function</span></span>
+<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a>    UNNEST(order_items) items</span>
+<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> order_id <span class="op">=</span> <span class="st">&#39;a0e747c954a595b0e3458c87ab1a4958&#39;</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="querying-data-in-bigquery" class="level2" data-number="2.3">
 <h2 data-number="2.3" class="anchored" data-anchor-id="querying-data-in-bigquery"><span class="header-section-number">2.3</span> <strong>Querying data in BigQuery</strong></h2>
+<ul>
+<li><p>CTE (Common Table Expressions) = temporary named result inside a query</p>
+<ul>
+<li><p>only exists for that query</p></li>
+<li><p>helps make complex queries easier to read</p></li>
+</ul></li>
+<li><p>CTEs vs subqueries</p>
+<ul>
+<li><p>subqueries can get nested and messy</p></li>
+<li><p>CTEs make queries easier to modify and maintain</p></li>
+</ul></li>
+<li><p>Writing a CTE</p>
+<ul>
+<li><p>use <code>WITH</code></p></li>
+<li><p>give the CTE a name</p></li>
+<li><p>reference it in the main query</p></li>
+</ul></li>
+<li><p>Multiple CTEs</p>
+<ul>
+<li><p>only use <code>WITH</code> once</p></li>
+<li><p>separate additional CTEs with commas</p></li>
+<li><p>later CTEs can use earlier CTEs</p></li>
+</ul></li>
+<li><p>Common uses</p>
+<ul>
+<li><p>filter data before the main query</p></li>
+<li><p>precompute repeated logic/aggregations</p></li>
+<li><p>join data in smaller steps</p></li>
+</ul></li>
+<li><p>Benefits</p>
+<ul>
+<li><p>cleaner queries</p></li>
+<li><p>easier to follow</p></li>
+<li><p>can improve performance by reducing repeated work</p></li>
+</ul></li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a># <span class="kw">Create</span> a <span class="kw">new</span> CTE orders <span class="cf">for</span> orders <span class="kw">with</span> a price <span class="kw">over</span> $<span class="dv">150</span>, un<span class="op">-</span>nesting order_items <span class="kw">to</span> find <span class="kw">the</span> price <span class="kw">column</span>.</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a># <span class="kw">Join</span> <span class="kw">the</span> results <span class="kw">of</span> <span class="kw">the</span> CTE <span class="kw">to</span> <span class="kw">the</span> ecomm_order_details dataset <span class="kw">to</span> find <span class="kw">the</span> <span class="dt">number</span> <span class="kw">of</span> order_status <span class="kw">and</span> aggregate them <span class="kw">by</span> COUNTing <span class="kw">the</span> orders <span class="kw">in</span> <span class="kw">each</span> status.</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co">-- Add the correct items to finish our filtered CTE</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="co">-- Create a new CTE with the name orders</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="kw">WITH</span> orders <span class="kw">AS</span> (</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="kw">SELECT</span> order_id</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- Add the correct column for the order item details</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>  <span class="kw">FROM</span> ecommerce.ecomm_orders, UNNEST(order_items) items</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- Fill in the correct column for the item price </span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>  <span class="kw">WHERE</span> items.price <span class="op">&gt;</span> <span class="dv">150</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- Aggregate to find the total number of orders</span></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">COUNT</span>(order_id),</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- Add the column for the status of the order</span></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>    order_status</span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> ecommerce.ecomm_order_details od</span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a><span class="kw">JOIN</span> orders o <span class="kw">USING</span> (order_id)</span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> order_status</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a># <span class="kw">Add</span> <span class="kw">the</span> correct aggregate <span class="kw">functions</span> <span class="kw">in</span> <span class="kw">the</span> subquery <span class="kw">and</span> <span class="kw">the</span> main <span class="kw">query</span>.</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a># <span class="kw">Use</span> ARRAY_LENGTH <span class="kw">to</span> find <span class="kw">the</span> <span class="dt">number</span> <span class="kw">of</span> items <span class="kw">in</span> <span class="kw">each</span> <span class="kw">order</span> <span class="kw">using</span> <span class="kw">the</span> order_items <span class="kw">column</span> twice <span class="kw">in</span> <span class="kw">the</span> main <span class="kw">query</span>.</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="kw">WITH</span> payments <span class="kw">AS</span> (</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">SELECT</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- Use the correct aggregate to find the highest number of payments</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">MAX</span>(payment_sequential) <span class="kw">AS</span> num_payments,</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    order_id</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  <span class="kw">FROM</span> ecommerce.ecomm_payments </span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- Group the results by order</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  <span class="kw">GROUP</span> <span class="kw">BY</span> order_id)</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>     </span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- Add the correct function to find the length or number of order items</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>  ARRAY_LENGTH(o.order_items) <span class="kw">AS</span> num_items,</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">MAX</span>(p.num_payments) <span class="kw">AS</span> max_payments</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> ecommerce.ecomm_orders o</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a><span class="kw">JOIN</span> payments p</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a><span class="co">-- Add the correct keyword to join using the same column</span></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a><span class="kw">USING</span> (order_id)</span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a><span class="co">-- Add the correct function to find the length or number of order items</span></span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> ARRAY_LENGTH(o.order_items)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a># <span class="dv">1</span>: <span class="kw">Create</span> a <span class="kw">new</span> CTE <span class="kw">named</span> orders that will <span class="fu">extract</span> <span class="kw">the</span> order_id <span class="kw">column</span> along <span class="kw">with</span> <span class="kw">the</span> product_id <span class="kw">and</span> price <span class="kw">from</span> <span class="kw">the</span> <span class="kw">nested</span> order_items <span class="kw">column</span>, <span class="kw">all</span> <span class="kw">from</span> <span class="kw">the</span> ecommerce.ecomm_orders <span class="kw">table</span>. <span class="kw">Filter</span> <span class="cf">for</span> price greater <span class="kw">than</span> <span class="fl">100.</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co">-- Create a CTE named &quot;orders&quot; that handles the queries for the ecomm_orders table</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="kw">WITH</span> orders <span class="kw">AS</span> (</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> order_id, items.product_id, items.price</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> ecommerce.ecomm_orders, UNNEST(order_items) items </span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> items.price <span class="op">&gt;</span> <span class="dv">100</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    order_id,</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">AVG</span>(p.product_weight_g) <span class="kw">as</span> avg_weight</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> orders o</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="kw">JOIN</span> ecommerce.ecomm_products p <span class="kw">ON</span> o.product_id <span class="op">=</span> p.product_id</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> o.order_id;</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a># <span class="dv">2</span>: <span class="kw">Build</span> a <span class="dt">second</span> CTE <span class="kw">named</span> products <span class="kw">and</span> <span class="kw">move</span> <span class="kw">all</span> <span class="kw">the</span> necessary elements <span class="kw">from</span> those <span class="kw">tables</span> <span class="kw">into</span> <span class="kw">the</span> <span class="kw">new</span> CTE.</span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a><span class="co">-- Create a second CTE named &quot;products&quot; and move all necessary elements into the CTE</span></span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a><span class="kw">WITH</span> orders <span class="kw">AS</span> (</span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> order_id, items.product_id, items.price</span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> ecommerce.ecomm_orders o, UNNEST(order_items) items </span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> items.price <span class="op">&gt;</span> <span class="dv">100</span></span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>),</span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>products <span class="kw">AS</span> (</span>
+<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> product_id,</span>
+<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a><span class="co">-- Find the average product weight</span></span>
+<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a><span class="fu">AVG</span>(product_weight_g) <span class="kw">as</span> avg_weight</span>
+<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> ecommerce.ecomm_products</span>
+<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a><span class="co">-- Group the data by the correct id column</span></span>
+<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> product_id</span>
+<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb13-36"><a href="#cb13-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-37"><a href="#cb13-37" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<span id="cb13-38"><a href="#cb13-38" aria-hidden="true" tabindex="-1"></a>    o.order_id,</span>
+<span id="cb13-39"><a href="#cb13-39" aria-hidden="true" tabindex="-1"></a>    p.avg_weight</span>
+<span id="cb13-40"><a href="#cb13-40" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> orders o</span>
+<span id="cb13-41"><a href="#cb13-41" aria-hidden="true" tabindex="-1"></a><span class="kw">JOIN</span> products p <span class="kw">ON</span> p.product_id <span class="op">=</span> o.product_id;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ul>
+<li><p>Aggregations summarize large datasets into smaller results</p>
+<ul>
+<li>useful for trends, patterns, and reporting</li>
+</ul></li>
+<li><p><code>GROUP BY</code></p>
+<ul>
+<li>groups rows for aggregation</li>
+</ul></li>
+<li><p><code>ORDER BY</code></p>
+<ul>
+<li><p>sorts results</p></li>
+<li><p>often used with aggregated values</p></li>
+</ul></li>
+<li><p>Common aggregate functions</p>
+<ul>
+<li><p><code>COUNT</code></p>
+<ul>
+<li>counts rows</li>
+</ul></li>
+<li><p><code>SUM</code></p>
+<ul>
+<li>total of numeric values</li>
+</ul></li>
+<li><p><code>AVG</code></p>
+<ul>
+<li>average of numeric values</li>
+</ul></li>
+<li><p><code>MIN</code></p>
+<ul>
+<li>lowest value</li>
+</ul></li>
+<li><p><code>MAX</code></p>
+<ul>
+<li>highest value</li>
+</ul></li>
+</ul></li>
+<li><p><code>COUNTIF</code></p>
+<ul>
+<li><p>counts rows that meet a condition</p></li>
+<li><p>ex: values over 500</p></li>
+</ul></li>
+<li><p><code>HAVING</code></p>
+<ul>
+<li><p>filters grouped/aggregated results</p></li>
+<li><p>similar to <code>WHERE</code> but used after aggregation</p></li>
+</ul></li>
+<li><p><code>ANY_VALUE</code></p>
+<ul>
+<li><p>returns one value from grouped data</p></li>
+<li><p>useful for non-aggregated columns</p></li>
+<li><p>can be combined with <code>HAVING MIN</code> or <code>HAVING MAX</code> to return a value tied to the lowest/highest result</p></li>
+</ul></li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a># <span class="kw">Write</span> a <span class="kw">query</span> that uses <span class="kw">the</span> COUNTIF <span class="kw">function</span> <span class="kw">to</span> find <span class="kw">all</span> <span class="kw">the</span> products <span class="kw">over</span> <span class="dv">5000</span> grams <span class="kw">from</span> <span class="kw">the</span> ecommerce.ecomm_products <span class="kw">table</span>.</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a># <span class="kw">Group</span> <span class="kw">the</span> <span class="kw">query</span> <span class="kw">by</span> <span class="kw">the</span> product_category_name_english <span class="kw">column</span>.</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co">-- Complete the query to count all the products over 5000 grams</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  product_category_name_english,</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- Add the function name and conditional expression</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  COUNTIF(product_weight_g <span class="op">&gt;</span> <span class="dv">5000</span>)</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> ecommerce.ecomm_products</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="co">-- Add the correct column for grouping</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> product_category_name_english; </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a># <span class="kw">Complete</span> <span class="kw">the</span> <span class="kw">query</span> <span class="kw">by</span> finding <span class="kw">the</span> average product weight (product_weight_g), grouped <span class="kw">by</span> <span class="kw">the</span> product <span class="kw">category</span> (product_category_name_english) <span class="kw">from</span> <span class="kw">the</span> ecommerce.ecomm_products <span class="kw">table</span>.</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a># <span class="kw">Use</span> <span class="kw">HAVING</span> <span class="kw">to</span> find product categories <span class="kw">with</span> an average weight <span class="kw">over</span> <span class="dv">10</span>,<span class="dv">000</span> grams.</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co">-- Write a query that finds all product categories and their average weight with an average weight over 10,000 grams</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- Add the product_category_name_english column and the average weight</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>    product_category_name_english, <span class="fu">AVG</span>(product_weight_g)</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> ecommerce.ecomm_products</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="co">-- Add the GROUP BY statement</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> product_category_name_english</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="co">-- Add the HAVING condition on the average weight aggregate</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a><span class="kw">HAVING</span> <span class="fu">AVG</span>(product_weight_g) <span class="op">&gt;</span> <span class="dv">10000</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a># <span class="kw">Complete</span> <span class="kw">the</span> <span class="kw">query</span> <span class="kw">by</span> <span class="kw">using</span> <span class="kw">the</span> ANY_VALUE aggregate <span class="kw">function</span> <span class="kw">on</span> <span class="kw">the</span> product_category_name_english <span class="kw">column</span>, <span class="kw">including</span> <span class="kw">the</span> <span class="kw">HAVING</span> clause <span class="kw">to</span> find <span class="kw">the</span> maximum <span class="fu">value</span> <span class="kw">of</span> product_photos_qty, <span class="kw">and</span> assign <span class="kw">the</span> alias random_product <span class="kw">to</span> <span class="kw">the</span> result.</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co">-- Finish the query below by adding the ANY_VALUE function</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  product_weight_g,</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    <span class="co">-- Complete the query by adding the ANY_VALUE function on the product category column</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    ANY_VALUE(product_category_name_english <span class="kw">HAVING</span> <span class="fu">MAX</span> product_photos_qty) <span class="kw">AS</span> random_product</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> ecommerce.ecomm_products</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> product_weight_g;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ul>
+<li><p>Special aggregate functions can be faster on very large datasets</p>
+<ul>
+<li>often use approximations to reduce processing</li>
+</ul></li>
+<li><p><code>ARRAY_CONCAT_AGG</code></p>
+<ul>
+<li>combines multiple arrays into one array</li>
+</ul></li>
+<li><p><code>STRING_AGG</code></p>
+<ul>
+<li><p>combines strings into one string</p></li>
+<li><p>can add a delimiter like commas</p></li>
+</ul></li>
+<li><p><code>APPROX_COUNT_DISTINCT</code></p>
+<ul>
+<li><p>estimates number of unique values</p></li>
+<li><p>faster than exact distinct counts on huge datasets</p></li>
+</ul></li>
+<li><p><code>APPROX_QUANTILES</code></p>
+<ul>
+<li><p>estimates quantiles/percentiles</p></li>
+<li><p>useful for splitting data into ranges</p></li>
+</ul></li>
+<li><p><code>APPROX_TOP_COUNT</code></p>
+<ul>
+<li>finds the most common top K values</li>
+</ul></li>
+<li><p><code>APPROX_TOP_SUM</code></p>
+<ul>
+<li>finds top K values based on summed amounts</li>
+</ul></li>
+<li><p><code>LOGICAL_AND</code></p>
+<ul>
+<li>TRUE only if all values are TRUE</li>
+</ul></li>
+<li><p><code>LOGICAL_OR</code></p>
+<ul>
+<li>TRUE if at least one value is TRUE</li>
+</ul></li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="data-management-and-optimization" class="level2" data-number="2.4">
 <h2 data-number="2.4" class="anchored" data-anchor-id="data-management-and-optimization"><span class="header-section-number">2.4</span> <strong>Data management and optimization</strong></h2>
