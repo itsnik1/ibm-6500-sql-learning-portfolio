@@ -1,0 +1,312 @@
+---
+title: "Introduction to BigQuery: Course Completion and Learning Notes"
+author: "Nikolas Sahami"
+date: today
+format:
+  html:
+    toc: true
+    toc-title: "Contents"
+    toc-depth: 3
+    number-sections: true
+    smooth-scroll: true
+    embed-resources: true
+editor: visual
+---
+
+# Course Completion Evidence
+
+# Learning Notes and Key Takeaways
+
+## **BigQuery Architecture and Structure**
+
+- BigQuery uses SQL to analyze massive datasets
+
+- Enterprise data warehouse
+
+- Serverless
+
+- it is an OLAP
+
+  - separates the computing and storage
+
+    - We can let BigQuery do the hard work
+
+    - it is like renting space in a shared kitchen
+
+- Snowflake and Amazon Redshift are alternatives for BigQuery
+
+- Different from SQL databases mainly because computing and storage are separate
+
+``` sql
+SELECT *
+FROM executive_data_file
+LIMIT 3;
+```
+
+This example was given as a refresher from the previous lecture about how to select all columns and limit to three rows.
+
+BQ Architecture
+
+- Stores data by column instead of row
+
+  - only reads the columns needed
+
+  - makes queries faster
+
+- Capacitor
+
+  - columnar storage format
+
+  - compresses data for faster querying
+
+- Colossus
+
+  - Google’s distributed file system
+
+  - handles storage, replication, and recovery
+
+- Jupiter
+
+  - connects storage and compute
+
+  - moves huge amounts of data quickly
+
+- Dremel
+
+  - runs and organizes queries
+
+  - splits queries into smaller parts
+
+- Borg
+
+  - manages computing resources
+
+  - routes around hardware failures
+
+- Query execution
+
+  - root → mixers → leaf nodes
+
+  - leaf nodes read/filter/aggregate data
+
+  - slots = computing power needed
+
+- Architecture groups
+
+  - Storage = Capacitor + Colossus
+
+  - Compute = Jupiter + Borg
+
+  - Query execution = Dremel
+
+Data Organization
+
+- BigQuery table names have 3 levels
+
+  - Project
+
+    - top-level structure in Google Cloud
+
+    - manages users and permissions
+
+  - Dataset
+
+    - similar to a schema
+
+    - contains tables
+
+    - has its own permissions
+
+  - Table
+
+    - where the actual data is stored
+
+- Full table name = project.dataset.table
+
+- Regions
+
+  - physical Google Cloud data center locations
+
+  - some regions have multiple zones
+
+  - BigQuery also has multi-regions for the US and EU
+
+- Dataset region is permanent once created
+
+  - data can be copied or replicated to another region
+
+  - cannot directly query across different regions
+
+``` sql
+# Ex: Modify the code to select the distinct seller_city values from the ecomm_sellers table in the ecommerce dataset.
+
+SELECT DISTINCT seller_city
+-- Specify the dataset and table
+FROM ecommerce.ecomm_sellers;
+```
+
+## **Writing queries and data types**
+
+- BigQuery uses normal SQL rules for most queries
+
+  - core SQL commands still work
+
+- Queries can be run through
+
+  - BigQuery Studio
+
+  - client libraries
+
+  - command line
+
+  - Pandas
+
+- Table names
+
+  - full format = `project.dataset.table`
+
+  - if using the default project, can use `dataset.table`
+
+- BigQuery uses GoogleSQL
+
+  - mostly standard SQL
+
+  - some functions and data types are different
+
+- Course uses Olist E-Commerce data
+
+  - Products
+
+    - category, weight, photos, etc
+
+  - Orders
+
+    - includes nested order item data
+
+  - Order details
+
+    - customer/order IDs, status, delivery timestamps
+
+    - null means that stage is not complete
+
+  - Payments
+
+    - payment type, installments, payment value
+
+- Joins + aggregations
+
+  - aggregation function
+
+  - left table
+
+  - right table
+
+  - join condition
+
+    - `ON` if column names differ
+
+    - `USING` if they are the same
+
+  - `GROUP BY` for the grouped result
+
+``` sql
+# Ex: Write a query to return the first ten rows of the dataset
+
+-- Add in the operator and integer to complete the query
+
+SELECT 
+    *
+FROM
+    ecommerce.ecomm_order_details
+-- Add the syntax to limit the data
+LIMIT 10;
+
+# 2: Change the query to select the order_id, customer_id, order_status, and order_purchase_timestamp columns from the order_details dataset for the first 10 rows.
+
+-- Add in the correct columns to the query
+
+SELECT 
+    -- Fill in the columns we want to return from our query
+    order_id, customer_id, order_status, order_purchase_timestamp
+FROM
+    ecommerce.ecomm_order_details
+LIMIT 10;
+
+# 3: Select the ten smallest orders from the ecommerce.ecomm_payments using SUM on the payment_value column for the first 10 rows of data.
+
+-- Add the correct column and limit values
+
+SELECT
+    -- Add the column to calculate the SUM
+    order_id, SUM(payment_value)
+FROM 
+    ecommerce.ecomm_payments
+GROUP BY order_id
+-- Add the correct column to order
+ORDER BY SUM(payment_value)
+-- Add the correct number of rows to limit
+LIMIT 10;
+
+# 4: Join the ecomm_orders to the ecomm_order_details using the common order_id column.
+Order the dataset by order_purchase_timestamp to show the most recent orders
+
+SELECT
+    ecomm_orders.order_id,
+    ecomm_orders.order_items,
+    ecomm_order_details.order_status,
+    ecomm_order_details.order_purchase_timestamp
+FROM
+    ecommerce.ecomm_orders
+-- Join on the common order_id column
+JOIN 
+    ecommerce.ecomm_order_details USING (order_id)
+-- Order to show recent orders
+ORDER BY order_purchase_timestamp DESC
+LIMIT 10;
+```
+
+- 3 main ways to batch load data
+
+  - BigQuery Studio
+
+  - `bq` command line
+
+  - `LOAD DATA` in SQL
+
+- BigQuery Studio
+
+  - upload from computer or Google Cloud Storage
+
+  - supported files include CSV, JSON, Avro, ORC, and Parquet
+
+  - choose project, dataset, and table
+
+  - can define schema manually or use autodetect
+
+- `bq` command line
+
+  - can load local files or files from Google Cloud Storage
+
+  - can use flags for file format, schema autodetect, etc
+
+- `LOAD DATA`
+
+  - loads files from Google Cloud Storage only
+
+  - can load multiple files if they have the same schema
+
+  - can specify format and options like skipping the header row
+
+- Main limitation
+
+  - `LOAD DATA` cannot load local files
+
+  - local uploads with Studio or `bq` must be under 100 MB
+
+## **Querying data in BigQuery**
+
+## **Data management and optimization**
+
+# Overall Reflection and Future Reference
+
+# Appendix: Publication Links
