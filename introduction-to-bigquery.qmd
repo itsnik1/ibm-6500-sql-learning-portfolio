@@ -15,6 +15,10 @@ editor: visual
 
 # Course Completion Evidence
 
+Here is my statement of accomplishment for the Introduction to BigQuery DataCamp course.
+
+![](images/intro-to-bigquery-certificate.png)
+
 # Learning Notes and Key Takeaways
 
 ## **BigQuery Architecture and Structure**
@@ -882,9 +886,347 @@ GROUP BY product_weight_g;
   - TRUE if at least one value is TRUE
 
 ``` sql
+# 1: Complete the query by using the LOGICAL_AND function on the order_status column to find customers with all orders marked as delivered.
+
+-- Complete the query using LOGICAL_AND
+
+SELECT
+  customer_id,
+  -- Fill in the LOGICAL_AND function
+  LOGICAL_AND(order_status = 'delivered') as all_delivered
+FROM ecommerce.ecomm_order_details
+GROUP BY customer_id;
+
+# 2: Complete the query by using the LOGICAL_OR function on the order_status column to find customers who have at least one order marked as shipped.
+
+-- Complete the query using LOGICAL_OR
+
+SELECT
+  customer_id,
+  -- Fill in the LOGICAL_OR function
+  LOGICAL_OR(order_status = 'shipped') as any_shipped
+FROM
+  ecommerce.ecomm_order_details
+GROUP BY customer_id
+```
+
+``` sql
+# 1: Concatenate distinct values from the product_category_name_english column using the STRING_AGG function, and filter records using the ARRAY_LENGTH function in the WHERE clause.
+
+-- Fill in the query to find the distinct product categories for each order
+
+SELECT
+    o.order_id,  
+    -- Use the STRING_AGG to find distinct values and separate them by a comma with a space
+    STRING_AGG(DISTINCT product_category_name_english, ', ') AS categories
+FROM
+    ecommerce.ecomm_orders o, UNNEST(order_items) items
+JOIN
+    ecommerce.ecomm_products p ON items.product_id = p.product_id
+-- Find the number of items in the order_items column
+WHERE ARRAY_LENGTH(o.order_items) > 1
+GROUP BY
+    order_id
+
+# 2: Concatenate the array data in the order_items column using the ARRAY_CONCAT_AGG function and aggregate the results by seller_id.
+
+-- Complete the query to aggregate the values in the order_items column
+
+SELECT
+	items.seller_id,
+    -- Concatenate the ARRAY data in order_items
+	ARRAY_CONCAT_AGG(order_items) AS seller_sales
+FROM ecommerce.ecomm_orders, UNNEST(order_items) items
+-- Group the query by the seller_id
+GROUP BY items.seller_id;
+```
+
+Window Functions
+
+- Window functions calculate across a set of related rows
+
+  - useful for running totals, moving averages, and rankings
+
+- Basic structure
+
+  - function + `OVER`
+
+  - `PARTITION BY`
+
+    - groups rows inside the window
+
+  - `ORDER BY`
+
+    - controls row order
+
+- `RANK`
+
+  - gives rows a rank within the window
+
+- `PERCENT_RANK`
+
+  - gives a percentile-style rank
+
+- `LAG`
+
+  - returns value from previous row
+
+- `LEAD`
+
+  - returns value from next row
+
+- `RANGE BETWEEN`
+
+  - controls how many rows/values are included around the current row
+
+  - can use preceding, following, or unbounded ranges
+
+- `QUALIFY`
+
+  - filters results based on a window function
+
+  - similar to `HAVING`, but for window calculations instead of aggregates
+
+``` sql
+# 1: Complete the CTE to group customers by total amount spent, then use the RANK function to rank customers by this total under the alias all_items.
+
+-- Complete the query to order customers by the total amount spent
+
+-- First, write a CTE to group customers and find their total amount spent
+WITH orders AS (
+  SELECT
+  -- Add the correct columns and aggregate functions
+  od.customer_id,
+  SUM(items.price) as all_items
+  FROM ecommerce.ecomm_orders o, UNNEST(o.order_items) items
+  JOIN ecommerce.ecomm_order_details od USING (order_id)
+  GROUP BY od.customer_id
+)
+
+SELECT
+	customer_id,
+	all_items,
+-- Fill in the RANK window function and OVER clause
+RANK() OVER(ORDER BY all_items DESC)
+FROM orders
+ORDER BY all_items DESC;
+
+# 2: Create a query that shows each item's current, previous, and next value in an order, grouped by customer_id.
+
+-- Complete the query to find the previous and next price for all items in an order
+
+SELECT
+  od.customer_id,
+  items.price, 
+-- Add the correct column for the item price
+  LAG(items.price) OVER(
+    -- Partition, or group the window function by the customer ID
+    PARTITION BY od.customer_id 
+    -- Order data by the order purchase timestamp
+    ORDER BY od.order_purchase_timestamp) as lag,
+  LEAD(items.price) OVER(
+    PARTITION BY od.customer_id 
+    ORDER BY od.order_purchase_timestamp) as lead
+FROM ecommerce.ecomm_orders o, UNNEST(o.order_items) items
+JOIN ecommerce.ecomm_order_details od USING (order_id)
+WHERE ARRAY_LENGTH(o.order_items) < 4
+ORDER BY ARRAY_LENGTH(o.order_items) DESC;
+```
+
+``` sql
+# Complete the query by filling in the window function and the QUALIFY statement to filter the query
+
+-- Complete the query to find all times when the rolling average is over $500
+
+SELECT
+  order_id,
+  order_purchase_timestamp,
+  -- Complete the rolling average for the current and nine previous rows
+  AVG(item.price) 
+  OVER(ORDER BY order_purchase_timestamp
+       ROWS BETWEEN 9 PRECEDING AND CURRENT ROW) as rolling_avg
+FROM ecommerce.ecomm_order_details od
+JOIN ecommerce.ecomm_orders o 
+USING (order_id), unnest(o.order_items) as item
+-- Add the qualify statement to find all rows with an average over $500
+QUALIFY rolling_avg > 500
+ORDER BY order_purchase_timestamp;
 ```
 
 ## **Data management and optimization**
+
+- BigQuery supports
+
+  - `INNER JOIN`
+
+  - `LEFT JOIN`
+
+  - `RIGHT JOIN`
+
+  - `FULL/OUTER JOIN`
+
+  - `CROSS JOIN`
+
+- `INNER JOIN`
+
+  - only returns matching rows from both tables
+
+  - `INNER` is optional
+
+    - `JOIN` works the same
+
+- `LEFT JOIN`
+
+  - returns all rows from the left table
+
+  - unmatched right-side values become `NULL`
+
+- `RIGHT JOIN`
+
+  - returns all rows from the right table
+
+  - unmatched left-side values become `NULL`
+
+- `FULL/OUTER JOIN`
+
+  - returns all rows from both tables
+
+  - includes matches and non-matches
+
+- `CROSS JOIN`
+
+  - joins every row to every row
+
+  - no join condition
+
+  - 10 rows × 10 rows = 100 rows
+
+  - can also be written by listing tables after `FROM` separated by a comma
+
+- `UNNEST`
+
+  - often works like a cross join when expanding array data
+
+``` sql
+# Finish the query to perform a cross join between the main ecomm_orders table and the un-nested STRUCT data contained in the same table in the order_items column.
+
+SELECT
+	o.order_id,
+	item.price
+FROM ecommerce.ecomm_orders o
+-- Add the correct join type and syntax to expand the STRUCT data in 
+CROSS JOIN UNNEST(o.order_items) item
+```
+
+``` sql
+# Count the number of orders for each product_id in the ecomm_products dataset.
+
+WITH orders AS (SELECT
+o.order_id,
+item.product_id
+FROM ecommerce.ecomm_orders o, unnest(o.order_items) item)
+
+SELECT 
+	p.product_id,
+	COUNT(o.order_id)
+FROM orders o
+-- Complete the join to the products table
+RIGHT JOIN ecommerce.ecomm_products p
+-- Join the data using the product_id column
+USING (product_id)
+GROUP BY p.product_id;
+```
+
+- DML (Data Manipulation Language) lets us modify data in BigQuery
+
+- Main statements
+
+  - `INSERT`
+
+    - adds new rows
+
+  - `UPDATE`
+
+    - changes existing values
+
+    - requires a `WHERE` condition
+
+  - `DELETE`
+
+    - removes rows
+
+    - permanent
+
+  - `MERGE`
+
+    - combines insert, update, and delete logic
+
+  - `CREATE TABLE AS`
+
+    - creates a new table from query results
+
+- Performance tips
+
+  - group DML operations instead of changing rows one at a time
+
+  - use `WHERE` to limit affected rows
+
+  - partitioning/clustering can improve performance
+
+- `MERGE`
+
+  - uses a target table + source table
+
+  - matches rows using a condition
+
+  - can update matching rows
+
+  - can insert non-matching rows
+
+``` sql
+# In the WHERE clause, find the date that is 90 days in the past to pass as an argument to the TIMESTAMP_SUB() function.
+# Then filter the results where the column order_purchase_timestamp is less than that value.
+
+SELECT order_id, order_purchase_timestamp 
+FROM ecommerce.ecomm_order_details
+-- Filter results for orders older than 90 days old
+WHERE order_purchase_timestamp <= TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL 90 DAY)
+```
+
+``` sql
+# 1: Join the data with a common column, order_id, that exists in both tables and group the data by the payment_installment.
+
+SELECT
+	p.payment_installments,
+	COUNT(p.order_id)                      
+FROM ecommerce.ecomm_payments p
+-- Add the join conditions 
+JOIN ecommerce.ecomm_order_details o USING (order_id)
+-- Group by the payment_installments column
+GROUP BY p.payment_installments
+
+# 2: Find the distinct number of orders that include a payment plan and use the most efficient APPROX function to accomplish this.
+
+SELECT
+	p.payment_installments,    
+    -- Add the correct function
+	APPROX_COUNT_DISTINCT(p.order_id)                      
+FROM ecommerce.ecomm_payments p
+JOIN ecommerce.ecomm_order_details o USING (order_id)
+GROUP BY p.payment_installments
+
+# 3: Find the average payment_value per payment_installments and add this new calculated column to the query.
+
+SELECT
+	p.payment_installments,
+	APPROX_COUNT_DISTINCT(p.order_id),       
+    -- Calculate the average payment per installment
+	AVG(p.payment_value)/p.payment_installments AS avg_installment_value
+FROM ecommerce.ecomm_payments p
+JOIN ecommerce.ecomm_order_details o USING (order_id)
+WHERE p.payment_installments > 0
+GROUP BY p.payment_installments
+```
 
 # Overall Reflection and Future Reference
 
